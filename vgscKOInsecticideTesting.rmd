@@ -1,0 +1,359 @@
+---
+title: "vgscKOInsecticideTesting"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(lme4)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(scales)
+library(ecotox)
+library(arm)
+library(emmeans)
+```
+
+
+## Deltamethrin bottle assays
+
+```{r}
+df_Delta <- read.csv("DeltaDeadAlive.csv")
+head(df_Delta)
+```
+
+GLM with probit link
+```{r}
+Delta <- glmer(cbind(Dead,Alive) ~ log10(Dose) * Genotype + (1 | Dose:Bottle),
+              data = df_Delta,
+              family = binomial(link = "probit"))
+
+summary(Delta)
+```
+
+Check for overdispersion
+
+```{r}
+rp <- residuals(Delta, type = "pearson")
+Delta_over <- sum(rp^2)/df.residual(Delta)
+Delta_over
+```
+
+Check residuals (should be <2 for good fit)
+
+```{r}
+Delta_Model_DevResid <- resid (Delta, type = "deviance")
+hist(Delta_Model_DevResid)
+
+```
+
+Check variance of residuals across the range of fitted values (most points should fall within the grey line)
+
+```{r}
+Delta_Model_Predict <- predict(Delta)
+binnedplot(Delta_Model_Predict, Delta_Model_DevResid)
+```
+
+Check for outliers (Cook's distance >1 indicates outliers)
+```{r}
+plot(Delta, which = 4)
+```
+
+Model fit looks good
+
+### Pairwise comparison of genotype impact
+Overall impact of genotype
+```{r}
+emmeans(Delta, pairwise ~ Genotype)
+```
+
+Impact of genotype at different insecticide levels
+
+```{r}
+emmeans(Delta, pairwise ~ Genotype | Dose,
+        at = list(Dose = c(0.05, 0.1, 0.5, 1, 5)))
+```
+
+**Interpretation**
+The vgscKO knockout reduces mortality from low dose deltamethrin
+exposure significantly overall, and at all doses except 0.05 ug/ml.
+
+### Produce prediction grid for plotting
+
+```{r}
+df_Delta$BottleID <- paste0(format(df_Delta$Dose, trim = TRUE), df_Delta$Bottle)
+head(df_Delta)
+
+pred_grid <- expand_grid(
+    Dose = sort(unique(df_Delta$Dose)),
+    Genotype = unique(df_Delta$Genotype)
+) |>
+    mutate(logdose = log10(Dose))
+
+
+head(pred_grid)
+```
+
+```{r}
+pred_link <- predict(
+  Delta, newdata = pred_grid, type = "link",
+  se.fit = TRUE, re.form = NA
+)
+
+inv_link <- pnorm
+
+pred_df <- pred_grid |>
+    mutate(
+        fit_link = pred_link$fit,
+        se_link = pred_link$se.fit,
+        fit = inv_link(fit_link),
+        lwr = inv_link(fit_link - 1.96 * se_link),
+        upr = inv_link(fit_link + 1.96 * se_link)
+        )
+
+# Aggregate observed proportions
+obs_df <- df_Delta |>
+    group_by(Dose, Genotype) |>
+    summarise(Dead = sum(Dead),Total = sum(Total), prop = Dead/Total, .groups = "drop")
+```
+
+Plot
+
+```{r}
+genotype_cols2 <- c(
+  "vgscKO" = "#0B3C8C",
+  "WT" = "#B11226"
+)
+
+genotype_names <- c(
+  "vgscKO" = expression(vgscKO^"+"),
+  "WT" = expression(vgscKO^"-")
+)
+
+ggplot() +
+    geom_ribbon(data = pred_df, aes(Dose, ymin = lwr, ymax = upr, fill = Genotype), alpha = 0.18) +
+    geom_line(data = pred_df, aes(Dose, y = fit, colour = Genotype), linewidth = 1) +
+    geom_point(data = obs_df, aes(Dose, y = prop, colour = Genotype), size = 2.5) +
+    scale_color_manual(values = genotype_cols2, labels = genotype_names) +
+    scale_fill_manual(values = genotype_cols2, labels = genotype_names) +
+    scale_x_log10(breaks = sort(unique(df_Delta$Dose))) +
+    scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,1)) +
+    labs(x = "Deltamethrin dose (µg/ml)", y = "Mortality (%)") +
+    theme_classic() +
+    theme(legend.position = "bottom")
+```
+
+
+## DDT
+
+Load data
+
+```{r}
+df_DDT <- read.csv("DDTDeadAlive.csv")
+head(df_DDT)
+```
+
+GLM with probit link
+
+```{r}
+DDT <- glmer(cbind(Dead,Alive) ~ log10(Dose) * Genotype + (1 | Dose:Bottle),
+              data = df_DDT,
+              family = binomial(link = "probit"))
+
+summary(DDT)
+```
+
+Check for overdispersion
+
+```{r}
+rp <- residuals(DDT, type = "pearson")
+DDT_over <- sum(rp^2)/df.residual(DDT)
+DDT_over
+```
+
+Check residuals (should be <2 for good fit)
+
+```{r}
+DDT_Model_DevResid <- resid (DDT, type = "deviance")
+hist(DDT_Model_DevResid)
+
+```
+
+Check variance of residuals across the range of fitted values (most points should fall within the grey line)
+
+```{r}
+DDT_Model_Predict <- predict(DDT)
+binnedplot(DDT_Model_Predict, (DDT_Model_DevResid))
+```
+
+Check for outliers (Cook's distance >1 indicates outliers)
+```{r}
+plot(DDT, which = 4)
+```
+
+Model fit looks good
+
+### Pairwise comparison of genotype impact
+Overall impact of genotype
+```{r}
+emmeans(DDT, pairwise ~ Genotype)
+```
+
+Impact of genotype at different insecticide levels
+
+```{r}
+emmeans(DDT, pairwise ~ Genotype | Dose,
+        at = list(Dose = c(0.5, 1, 5, 10, 25, 50, 100)))
+```
+
+**Interpretation**
+The vgscKO knockout reduces mortality from low dose DDT exposure
+significantly overall, and at all doses except 0.5 ug/ml and 1 ug/ml.
+
+
+### Produce prediction grid for plotting
+
+```{r}
+df_DDT$BottleID <- paste0(format(df_DDT$Dose, trim = TRUE), df_DDT$Bottle)
+head(df_DDT)
+
+pred_grid <- expand_grid(
+    Dose = sort(unique(df_DDT$Dose)),
+    Genotype = unique(df_DDT$Genotype)
+) |>
+    mutate(logdose = log10(Dose))
+
+
+head(pred_grid)
+```
+
+```{r}
+pred_link <- predict(
+  DDT, newdata = pred_grid, type = "link",
+  se.fit = TRUE, re.form = NA
+)
+
+inv_link <- pnorm
+
+pred_df <- pred_grid |>
+    mutate(
+        fit_link = pred_link$fit,
+        se_link = pred_link$se.fit,
+        fit = inv_link(fit_link),
+        lwr = inv_link(fit_link - 1.96 * se_link),
+        upr = inv_link(fit_link + 1.96 * se_link)
+        )
+
+# Aggregate observed proportions
+obs_df <- df_DDT |>
+    group_by(Dose, Genotype) |>
+    summarise(Dead = sum(Dead),Total = sum(Total), prop = Dead/Total, .groups = "drop")
+
+```
+
+Plot
+
+```{r}
+genotype_cols2 <- c(
+  "vgscKO" = "#0B3C8C",
+  "WT" = "#B11226"
+)
+
+genotype_names <- c(
+  "vgscKO" = expression(vgscKO^"+"),
+  "WT" = expression(vgscKO^"-")
+)
+
+ggplot() +
+    geom_ribbon(data = pred_df, aes(Dose, ymin = lwr, ymax = upr, fill = Genotype), alpha = 0.18) +
+    geom_line(data = pred_df, aes(Dose, y = fit, colour = Genotype), linewidth = 1) +
+    geom_point(data = obs_df, aes(Dose, y = prop, colour = Genotype), size = 2.5) +
+    scale_color_manual(values = genotype_cols2, labels = genotype_names) +
+    scale_fill_manual(values = genotype_cols2, labels = genotype_names) +
+    scale_x_log10(breaks = sort(unique(df_DDT$Dose))) +
+    scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,1)) +
+    labs(x = "DDT dose (µg/ml)", y = "Mortality (%)") +
+    theme_classic() +
+    theme(legend.position = "bottom")
+```
+
+## LC tables for both insecticides
+
+Load combined data
+
+```{r}
+df <- read.csv("InsecticideDeadAlive.csv")
+head(df)
+```
+
+```{r}
+df_clean <- subset(df,
+                   Dose > 0 &
+                   !is.na(Dose) &
+                   !is.na(Dead) &
+                   !is.na(Total) &
+                   Total > 0
+)
+nrow(df)
+nrow(df_clean)
+```
+
+```{r}
+KO_delta <- LC_probit((Dead/Total) ~ log10(Dose),
+          p = c(50,90,95,99),
+          weights = Total,
+          data = df_clean,
+          subset = df_clean$Genotype == "vgscKO" & df_clean$Insecticide == "Deltamethrin"
+)
+
+WT_delta <- LC_probit((Dead/Total) ~ log10(Dose),
+          p = c(50,90,95,99),
+          weights = Total,
+          data = df_clean,
+          subset = df_clean$Genotype == "WT" & df_clean$Insecticide == "Deltamethrin"
+)
+
+KO_DDT<- LC_probit((Dead/Total) ~ log10(Dose),
+          p = c(50,90,95,99),
+          weights = Total,
+          data = df_clean,
+          subset = df_clean$Genotype == "vgscKO" & df_clean$Insecticide == "DDT"
+)
+
+WT_DDT<- LC_probit((Dead/Total) ~ log10(Dose),
+          p = c(50,90,95,99),
+          weights = Total,
+          data = df_clean,
+          subset = df_clean$Genotype == "WT" & df_clean$Insecticide == "DDT"
+)
+
+```
+
+```{r}
+KO_delta2 <- KO_delta %>%
+  mutate(Genotype = "vgscKO",
+         Insecticide = "Deltamethrin")
+
+WT_delta2 <- WT_delta %>%
+  mutate(Genotype = "WT",
+         Insecticide = "Deltamethrin")
+
+KO_DDT2 <- KO_DDT %>%
+  mutate(Genotype = "vgscKO",
+         Insecticide = "DDT")
+
+WT_DDT2 <- WT_DDT %>%
+  mutate(Genotype = "WT",
+         Insecticide = "DDT")
+
+LC_all <- bind_rows(KO_delta2, WT_delta2, KO_DDT2, WT_DDT2)
+
+LC_trimmed <- LC_all %>%
+  dplyr::select(Genotype, Insecticide, p, dose, LCL, UCL, se)
+
+LC_trimmed
+```
