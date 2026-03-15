@@ -426,12 +426,12 @@ testOutliers(sim)
     ##  DHARMa bootstrapped outlier test
     ## 
     ## data:  sim
-    ## outliers at both margin(s) = 0, observations = 106, p-value = 0.72
+    ## outliers at both margin(s) = 0, observations = 106, p-value = 0.8
     ## alternative hypothesis: two.sided
     ##  percent confidence interval:
     ##  0.00000000 0.02830189
     ## sample estimates:
-    ## outlier frequency (expected: 0.00877358490566038 ) 
+    ## outlier frequency (expected: 0.00792452830188679 ) 
     ##                                                  0
 
 Beta-binomial model fits well
@@ -466,3 +466,49 @@ pairs(emmeans(m_hatch_bb, ~ vgscKOParent, type = "response"))
 
 There was no significant effect of Genotype or vgscKO Parent sex on the
 hatch rate of eggs.
+
+# Likelihood analysis for homozygotes in group lays
+
+``` r
+# Data
+pos <- c(338, 513, 448)
+tot <- c(500, 759, 661)
+
+# Hypotheses
+pA <- 0.75 # Proportion of clutch positive if homs exist
+pB <- 0.67 # Proportion of clutch positive if homs don't exist
+```
+
+``` r
+# Log-likelihood under binomial for each hypothesis
+llA <- sum(dbinom(pos, size = tot, prob = pA, log = TRUE))
+llB <- sum(dbinom(pos, size = tot, prob = pB, log = TRUE))
+
+# Likelihood ratio in favour of B over A
+LR_B_over_A <- exp(llB - llA)
+
+# Report in log10 (Jeffreys-style scale)
+log10_LR_B_over_A <- (llB - llA) / log(10)
+list(
+  logLik_A = llA,
+  logLik_B = llB,
+  LR_B_over_A = LR_B_over_A,
+  log10_LR_B_over_A = log10_LR_B_over_A
+)
+```
+
+    ## $logLik_A
+    ## [1] -36.22815
+    ## 
+    ## $logLik_B
+    ## [1] -10.34019
+    ## 
+    ## $LR_B_over_A
+    ## [1] 174984202038
+    ## 
+    ## $log10_LR_B_over_A
+    ## [1] 11.243
+
+**Interpretation** The data are 1.75 x 10^11 more likely to occur with a
+67% ratio (e.g. homozygotes don’t exist) than a 75% ratio (they do
+exist).
