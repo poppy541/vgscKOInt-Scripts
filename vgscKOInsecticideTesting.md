@@ -2,14 +2,21 @@ vgscKOInsecticideTesting
 ================
 
 ``` r
-library(lme4)
+library(lme4); packageVersion('lme4')
 ```
 
     ## Loading required package: Matrix
 
+    ## [1] '1.1.38'
+
 ``` r
-library(ggplot2)
-library(dplyr)
+library(ggplot2); packageVersion('ggplot2')
+```
+
+    ## [1] '4.0.1'
+
+``` r
+library(dplyr); packageVersion('dplyr')
 ```
 
     ## 
@@ -23,8 +30,10 @@ library(dplyr)
     ## 
     ##     intersect, setdiff, setequal, union
 
+    ## [1] '1.1.4'
+
 ``` r
-library(tidyr)
+library(tidyr); packageVersion('tidyr')
 ```
 
     ## 
@@ -34,10 +43,22 @@ library(tidyr)
     ## 
     ##     expand, pack, unpack
 
+    ## [1] '1.3.2'
+
 ``` r
-library(scales)
-library(ecotox)
-library(arm)
+library(scales); packageVersion('scales')
+```
+
+    ## [1] '1.4.0'
+
+``` r
+library(ecotox); packageVersion('ecotox')
+```
+
+    ## [1] '1.4.4'
+
+``` r
+library(arm); packageVersion('arm')
 ```
 
     ## Loading required package: MASS
@@ -61,13 +82,17 @@ library(arm)
     ## 
     ##     rescale
 
+    ## [1] '1.14.4'
+
 ``` r
-library(emmeans)
+library(emmeans); packageVersion('emmeans')
 ```
 
     ## Welcome to emmeans.
     ## Caution: You lose important information if you filter this package's results.
     ## See '? untidy'
+
+    ## [1] '2.0.1'
 
 ## Deltamethrin bottle assays
 
