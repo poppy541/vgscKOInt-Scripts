@@ -509,6 +509,8 @@ list(
     ## $log10_LR_B_over_A
     ## [1] 11.243
 
-**Interpretation** The data are 1.75 x 10^11 more likely to occur with a
+**Interpretation**
+
+The data are 1.75 x 10^11 more likely to occur with a
 67% ratio (e.g. homozygotes don’t exist) than a 75% ratio (they do
 exist).
