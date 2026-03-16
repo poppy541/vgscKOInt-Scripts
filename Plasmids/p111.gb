@@ -1,4 +1,4 @@
-LOCUS       Copy_of_#7              7035 bp ds-DNA     circular     02-MAR-2026
+LOCUS       p111                    7035 bp ds-DNA     circular     16-MAR-2026
 DEFINITION  .
 COMMENT     Imported using the Genbank importer. File name: 7_contig_annot.gbk
             Annotated with pLannotate v1.2.0
@@ -14,18 +14,8 @@ FEATURES             Location/Qualifiers
                      /fragment="True"
                      /other="CDS"
                      /translation="T*DHNQPYHICRGFTCFKKPPTPPPEPE"
-     polyA_signal    29..150
-                     /label="SV40 poly(A) signal"
-                     /ApEinfo_revcolor="#75c6a9"
-                     /ApEinfo_fwdcolor="#75c6a9"
-                     /note="pLannotate"
-                     /database="snapgene"
-                     /identity="100.0"
-                     /match_length="100.0"
-                     /fragment="False"
-                     /other="polyA_signal"
      misc_feature    complement(150..949)
-                     /label="PH (RFP) LHA"
+                     /label="vgscInt LHA"
                      /ApEinfo_revcolor="#c7b0e3"
                      /ApEinfo_fwdcolor="#c7b0e3"
      CDS             complement(198..857)
@@ -171,16 +161,6 @@ FEATURES             Location/Qualifiers
                      /label="LacO"
                      /ApEinfo_revcolor="#84b0dc"
                      /ApEinfo_fwdcolor="#84b0dc"
-     protein_bind    3552..3568
-                     /label="lac operator"
-                     /ApEinfo_revcolor="#9eafd2"
-                     /ApEinfo_fwdcolor="#9eafd2"
-                     /note="pLannotate"
-                     /database="snapgene"
-                     /identity="100.0"
-                     /match_length="100.0"
-                     /fragment="False"
-                     /other="protein_bind"
      primer_bind     3576..3596
                      /label="M13-rev"
                      /ApEinfo_revcolor="#85dae9"
@@ -195,16 +175,6 @@ FEATURES             Location/Qualifiers
                      /match_length="61.4"
                      /fragment="True"
                      /other="misc_feature"
-     promoter        3640..4199
-                     /label="Ac5 promoter (fragment)"
-                     /ApEinfo_revcolor="#f8d3a9"
-                     /ApEinfo_fwdcolor="#f8d3a9"
-                     /note="pLannotate"
-                     /database="snapgene"
-                     /identity="100.0"
-                     /match_length="22.9"
-                     /fragment="True"
-                     /other="promoter"
      promoter        3640..4203
                      /label="Actin5c"
                      /ApEinfo_revcolor="#c6c9d1"
@@ -224,14 +194,6 @@ FEATURES             Location/Qualifiers
                      /fragment="False"
                      /other="CDS"
                      /translation="MVSKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTLTWGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRAEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNYISHNVYITADKQKNGIKANFKIRHNIEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITLGMDELYK*"
-     misc_feature    complement(4257..4277)
-                     /label="eGFP_N"
-                     /ApEinfo_revcolor="#f58a5e"
-                     /ApEinfo_fwdcolor="#f58a5e"
-     misc_feature    4864..4885
-                     /label="eGFP_C_Fwd"
-                     /ApEinfo_revcolor="#b1ff67"
-                     /ApEinfo_fwdcolor="#b1ff67"
      3'UTR           4944..5172
                      /label="SV40 terminator"
                      /ApEinfo_revcolor="#84b0dc"
@@ -247,10 +209,6 @@ FEATURES             Location/Qualifiers
                      /fragment="True"
                      /other="CDS"
                      /translation="NQPYHICRGFTCFKKPPTPPPEPET*"
-     misc_feature    complement(5002..5018)
-                     /label="eGFP_C_Rev"
-                     /ApEinfo_revcolor="#f58a5e"
-                     /ApEinfo_fwdcolor="#f58a5e"
      polyA_signal    5052..5133
                      /label="SV40 poly(A) signal"
                      /ApEinfo_revcolor="#c6c9d1"
@@ -265,13 +223,9 @@ FEATURES             Location/Qualifiers
                      /label="Translation 5954-5173"
                      /translation="MSTSAGWDGVLDGIINEEDCLPPDNDKGYPGNCGSSTIGITYLLAYLVISFLIVINMYIAVILENYSQATEDVQEGLTDDDYDMYYEIWQQFDPDGTQYVRYDQLSDFLDVLEPPLQIHKPNRYKIISMDIPICRGDMMFCVDILDALTKDFFARKGNPIEETAELGEVQQRPDEVGYEPVSSTLWRQREEYCARLIQHAWKRYKQRHGGGTDASGDDLEIDACDNGCGGGNGNENDDSGDGATGSGDNGSQHGGGSISG"
      misc_feature    complement(5173..5972)
-                     /label="RFP PH RHAv2 (PAM removed)"
+                     /label="vgscInt RHA (PAM removed)"
                      /ApEinfo_revcolor="#b7e6d7"
                      /ApEinfo_fwdcolor="#b7e6d7"
-     misc_feature    complement(5942..5964)
-                     /label="Vgsc Intron 30 gRNA v2 PAM removed"
-                     /ApEinfo_revcolor="#d6b295"
-                     /ApEinfo_fwdcolor="#d6b295"
      primer          complement(5945..5964)
                      /label="Vgsc Intron 30 gRNA v2"
                      /note="sequence: TCAATTTCAGATGTCAACCT"
@@ -281,16 +235,6 @@ FEATURES             Location/Qualifiers
                      /label="3xP3\Promoter"
                      /ApEinfo_revcolor="#85dae9"
                      /ApEinfo_fwdcolor="#85dae9"
-     promoter        6082..6204
-                     /label="hsp70 promoter (fragment)"
-                     /ApEinfo_revcolor="#b1ff67"
-                     /ApEinfo_fwdcolor="#b1ff67"
-                     /note="pLannotate"
-                     /database="snapgene"
-                     /identity="100.0"
-                     /match_length="51.5"
-                     /fragment="True"
-                     /other="promoter"
      misc_feature    6218..6242
                      /label="MCS (fragment)"
                      /ApEinfo_revcolor="#b4abac"
@@ -301,6 +245,10 @@ FEATURES             Location/Qualifiers
                      /match_length="47.2"
                      /fragment="True"
                      /other="misc_feature"
+     misc_feature    6264..6943
+                     /label="dsRed"
+                     /ApEinfo_revcolor="#faac61"
+                     /ApEinfo_fwdcolor="#faac61"
      CDS             6264..6943
                      /label="DsRed1"
                      /ApEinfo_revcolor="#84b0dc"
