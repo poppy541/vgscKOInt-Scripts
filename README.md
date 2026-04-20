@@ -33,4 +33,3 @@ Plasmid maps (.svg and .gbk) for:
 * p21: helper plasmid for vgscKO
 * p110: helper plasmid for vgscInt
 * p111: donor plasmid for vgscInt
-Plasmid sequences also deposited in GenBank [URL WHEN AVAILABLE]
