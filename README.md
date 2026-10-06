@@ -1,4 +1,4 @@
-# Scripts and supplementary data for the manuscript 'Haplosufficient intronic and exonic knockouts of *vgsc* in *Anopheles gambiae*'
+# Scripts and supplementary data for the manuscript '*vgsc* is haplosufficient in *Anopheles gambiae* with implications for insecticide resistance and genetic control'
 
 ## Contents
 
